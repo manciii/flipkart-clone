@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL= 'http://localhost:8000';
+const URL= '';
 
 export const authenticatesSignup = async (data) => {
     try{
@@ -22,10 +22,21 @@ export const authenticateLogin = async (data) => {
 
 export const createRazorpayOrder = async (amount) => {
   try {
-    const response = await axios.post('http://localhost:8000/razorpay/order', { amount });
+    const response = await axios.post(`${URL}/razorpay/order`, { amount });
     return response.data;
   } catch (error) {
     console.error('Error while creating Razorpay order', error);
     return null;
   }
 };
+
+export const getRazorpayKey = async () => {
+  try {
+    const response = await axios.get(`${URL}/razorpay/key`);
+    return response.data.key;
+  } catch (error) {
+    console.error('Error fetching Razorpay key:', error);
+    return null;
+  }
+};
+

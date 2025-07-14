@@ -1,15 +1,17 @@
 import axios from 'axios';
 import {
-  PAYMENT_REQUEST,
+  PAYMENT_REQUEST, 
   PAYMENT_SUCCESS,
   PAYMENT_FAIL
 } from '../constants/paymentConstants';
+
+const URL = '';
 
 export const verifyPayment = (paymentData) => async (dispatch) => {
   try {
     dispatch({ type: PAYMENT_REQUEST });
 
-    const { data } = await axios.post("http://localhost:8000/razorpay/verify", paymentData);
+    const { data } = await axios.post(`${URL}/razorpay/verify`, paymentData);
 
     dispatch({ type: PAYMENT_SUCCESS, payload: data });
     alert(" Payment verified successfully!");

@@ -17,12 +17,20 @@ app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use('/', Router);
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 const USERNAME = process.env.DB_USERNAME;
 const PASSWORD = process.env.DB_PASSWORD;
 
-Connection(USERNAME, PASSWORD)
+const URL = process.env.MONGODB_URI || `mongodb+srv://${USERNAME}:${PASSWORD}@ac-gyensgu.ettjroa.mongodb.net/?retryWrites=true&w=majority&appName=ecommerce-web`;
+
+
+Connection(URL);
+
+if(process.env.NODE_ENV ==='production'){
+    app.use(express.static('client/build'))
+}
 
 app.listen(PORT, () => console.log(`server is running successfully on PORT ${PORT} `));
 
+DefaultData();

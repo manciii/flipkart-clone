@@ -14,7 +14,8 @@ import ProductDetail from './ProductDetail';
 
 const Component = styled(Box)`
     background: #f2f2f2
-    margin-top: 55px;
+    margin-top: 80px;
+    padding-top: 20px;
 `;
 
 const Container = styled(Grid)(({ theme }) => ({

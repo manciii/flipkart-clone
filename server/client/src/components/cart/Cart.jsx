@@ -7,7 +7,7 @@ import CartItem from './CartItem';
 import TotalView from './TotalView';
 import EmptyCart from './EmptyCart';
 
-import { createRazorpayOrder } from '../../service/api';
+import { createRazorpayOrder, getRazorpayKey } from '../../service/api';
 import { verifyPayment } from '../../redux/actions/paymentActions';
 import { RemoveFromCart } from '../../redux/actions/cartActions';
 
@@ -95,15 +95,18 @@ const Cart = () => {
 
     const buyNow = async () => {
     console.log("buyNow triggered");
+
+    const key = await getRazorpayKey();
     const orderData = await createRazorpayOrder(totalAmount);
+
     console.log(" Order Data:", orderData); 
-    if (!orderData) {
+    if (!orderData || !key) {
         alert("Could not initiate payment.");
         return;
     }
 
     const options = {
-        key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+        key: key,
         amount: orderData.amount,
         currency: orderData.currency,
         name: "Flipkart Clone",

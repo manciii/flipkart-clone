@@ -5,7 +5,7 @@ import {ShoppingCart as Cart, FlashOn as Flash} from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/actions/cartActions';
-import { createRazorpayOrder } from '../../service/api';
+import { createRazorpayOrder, getRazorpayKey } from '../../service/api';
 
 const LeftContainer = styled(Box)(({ theme }) => ({
     minWidth: '32%' ,
@@ -56,14 +56,16 @@ const ActionItem = ({ product}) => {
     }
 
     const buyNow = async () => {
-    const orderData = await createRazorpayOrder(product.price.cost);
-    if (!orderData) {
-        alert("Could not initiate payment.");
-        return;
-    }
+        const key = await getRazorpayKey();
+        const orderData = await createRazorpayOrder(product.price.cost);
+        
+        if (!orderData || !key) {
+            alert("Could not initiate payment.");
+            return;
+        }
 
     const options = {
-        key: process.env.REACT_APP_RAZORPAY_KEY_ID || "rzp_test_xxxxxxxx",
+        key: key,
         amount: orderData.amount,
         currency: orderData.currency,
         name: "Flipkart Clone",
@@ -75,7 +77,7 @@ const ActionItem = ({ product}) => {
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
             };
-            // optional: dispatch verifyPayment here too
+            
         },
         prefill: {
             name: "Test User",
